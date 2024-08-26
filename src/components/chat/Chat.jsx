@@ -27,7 +27,127 @@ function Chat() {
           <img src="./info.png" alt="avatar" />
         </div>
       </div>
-      <div className="center"></div>
+      <div className="center">
+        <div className="message">
+          <img src="./avatar.png" alt="avatar" />
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
+              fugiat at quidem? Reprehenderit quibusdam, quasi ad, neque fugit
+              laboriosam assumenda eius odit sit ratione quas consectetur,
+              facilis nulla nemo atque?
+            </p>
+            <span>1 min ago</span>
+          </div>
+        </div>
+        <div className="message own">
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
+              fugiat at quidem? Reprehenderit quibusdam, quasi ad, neque fugit
+              laboriosam assumenda eius odit sit ratione quas consectetur,
+              facilis nulla nemo atque?
+            </p>
+            <span>1 min ago</span>
+          </div>
+        </div>
+        <div className="message">
+          <img src="./avatar.png" alt="avatar" />
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
+              fugiat at quidem? Reprehenderit quibusdam, quasi ad, neque fugit
+              laboriosam assumenda eius odit sit ratione quas consectetur,
+              facilis nulla nemo atque?
+            </p>
+            <span>1 min ago</span>
+          </div>
+        </div>
+        <div className="message own">
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
+              fugiat at quidem? Reprehenderit quibusdam, quasi ad, neque fugit
+              laboriosam assumenda eius odit sit ratione quas consectetur,
+              facilis nulla nemo atque?
+            </p>
+            <span>1 min ago</span>
+          </div>
+        </div>
+        <div className="message">
+          <img src="./avatar.png" alt="avatar" />
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
+              fugiat at quidem? Reprehenderit quibusdam, quasi ad, neque fugit
+              laboriosam assumenda eius odit sit ratione quas consectetur,
+              facilis nulla nemo atque?
+            </p>
+            <span>1 min ago</span>
+          </div>
+        </div>
+        <div className="message own">
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
+              fugiat at quidem? Reprehenderit quibusdam, quasi ad, neque fugit
+              laboriosam assumenda eius odit sit ratione quas consectetur,
+              facilis nulla nemo atque?
+            </p>
+            <span>1 min ago</span>
+          </div>
+        </div>
+        <div className="message">
+          <img src="./avatar.png" alt="avatar" />
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
+              fugiat at quidem? Reprehenderit quibusdam, quasi ad, neque fugit
+              laboriosam assumenda eius odit sit ratione quas consectetur,
+              facilis nulla nemo atque?
+            </p>
+            <span>1 min ago</span>
+          </div>
+        </div>
+        <div className="message own">
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
+              fugiat at quidem? Reprehenderit quibusdam, quasi ad, neque fugit
+              laboriosam assumenda eius odit sit ratione quas consectetur,
+              facilis nulla nemo atque?
+            </p>
+            <span>1 min ago</span>
+          </div>
+        </div>
+        <div className="message">
+          <img src="./avatar.png" alt="avatar" />
+          <div className="texts">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
+              fugiat at quidem? Reprehenderit quibusdam, quasi ad, neque fugit
+              laboriosam assumenda eius odit sit ratione quas consectetur,
+              facilis nulla nemo atque?
+            </p>
+            <span>1 min ago</span>
+          </div>
+        </div>
+        <div className="message own">
+          <div className="texts">
+            <img
+              src="https://images.pexels.com/photos/2693212/pexels-photo-2693212.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+              alt="shared image"
+            />
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
+              fugiat at quidem? Reprehenderit quibusdam, quasi ad, neque fugit
+              laboriosam assumenda eius odit sit ratione quas consectetur,
+              facilis nulla nemo atque?
+            </p>
+            <span>1 min ago</span>
+          </div>
+        </div>
+      </div>
       <div className="bottom">
         <div className="icons">
           <img src="./img.png" alt="emoji" />
