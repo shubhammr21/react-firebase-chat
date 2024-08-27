@@ -72,6 +72,9 @@ function Login() {
         id: response.user.uid,
         blocked: []
       })
+      await setDoc(doc(db, "userChats", response.user.uid), {
+        chats: []
+      })
       toast.success("Account created! You can login now!")
     } catch (error) {
       console.log(error)
