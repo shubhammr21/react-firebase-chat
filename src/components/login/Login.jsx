@@ -1,4 +1,7 @@
-import { createUserWithEmailAndPassword } from "firebase/auth"
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from "firebase/auth"
 import { doc, setDoc } from "firebase/firestore/lite"
 import { useState } from "react"
 import { toast } from "react-toastify"
@@ -25,8 +28,24 @@ function Login() {
 
   const handleLogin = async e => {
     e.preventDefault()
+    setLoading(true)
+    const formData = new FormData(e.target)
+    const { email, password } = Object.fromEntries(formData)
+    if (!(email || password)) {
+      toast.warn("All field required")
 
-    toast.success("Hello")
+      return
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password)
+      toast.success("You have successfully logged in!")
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    } finally {
+      setLoading(false)
+    }
   }
   const handleRegister = async e => {
     e.preventDefault()
