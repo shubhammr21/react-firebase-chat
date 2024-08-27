@@ -1,6 +1,6 @@
-import { doc, getDoc } from "firebase/firestore/lite"
+import { doc, getDoc } from "firebase/firestore"
 import { create } from "zustand"
-import { db } from "../firebase"
+import { auth, db } from "../firebase"
 
 export const useUserStore = create(set => ({
   currentUser: null,
@@ -12,6 +12,9 @@ export const useUserStore = create(set => ({
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
         return set({ currentUser: docSnap.data(), isLoading: false })
+      } else {
+        auth.signOut()
+        return set({ currentUser: null, isLoading: false })
       }
     } catch (error) {
       return set({ currentUser: null, isLoading: false })

@@ -2,7 +2,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword
 } from "firebase/auth"
-import { doc, setDoc } from "firebase/firestore/lite"
+import { doc, setDoc } from "firebase/firestore"
 import { useState } from "react"
 import { toast } from "react-toastify"
 import { auth, db } from "../../lib/firebase"
