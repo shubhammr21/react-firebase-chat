@@ -28,11 +28,8 @@ function Chat() {
     }
   }, [chatId])
 
-  console.log(chat)
-
   const handleEmoji = e => {
     setText(prev => prev + e.emoji)
-    console.log(e)
   }
 
   return (
