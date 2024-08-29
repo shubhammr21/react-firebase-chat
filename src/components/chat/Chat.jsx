@@ -10,17 +10,35 @@ import { useEffect, useRef, useState } from "react"
 import { db } from "../../lib/firebase"
 import { useChatStore } from "../../lib/store/chatStore"
 import { useUserStore } from "../../lib/store/userStore"
+import uploadFileToFirebaseStorage from "../../lib/upload"
 import "./chat.css"
 
 function Chat() {
   const [isEmojiOpen, setIsEmojiOpen] = useState(false)
   const [chat, setChat] = useState()
   const [text, setText] = useState("")
+  const [counter, setCounter] = useState(0)
 
   const { currentUser } = useUserStore()
   const { chatId, user } = useChatStore()
+  const [image, setImage] = useState({
+    file: null,
+    url: ""
+  })
+  const handleImage = e => {
+    const image = e.target.files[0]
+    if (image) {
+      setImage({
+        file: image,
+        url: URL.createObjectURL(image)
+      })
+    }
+  }
 
   const endRef = useRef(null)
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [counter])
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [])
@@ -43,11 +61,13 @@ function Chat() {
     if (text === "") return
 
     try {
+      const imageUrl = await uploadFileToFirebaseStorage(image.file)
       await updateDoc(doc(db, "chats", chatId), {
         messages: arrayUnion({
           senderId: currentUser.id,
           text,
-          createdAt: new Date()
+          createdAt: new Date(),
+          ...(imageUrl && { img: imageUrl })
         })
       })
 
@@ -71,6 +91,11 @@ function Chat() {
         }
       })
       setText("")
+      setImage({
+        file: null,
+        url: null
+      })
+      setCounter(prev => prev + 1)
     } catch (error) {
       console.error(error)
     }
@@ -94,7 +119,12 @@ function Chat() {
       </div>
       <div className="center">
         {chat?.messages?.map(message => (
-          <div className="message" key={message?.createdAt}>
+          <div
+            className={
+              message.senderId === currentUser?.id ? "message own" : "message"
+            }
+            key={message?.createdAt}
+          >
             <img src="./avatar.png" alt="avatar" />
             <div className="texts">
               {message?.img && <img src={message?.img} alt="shared image" />}
@@ -103,40 +133,33 @@ function Chat() {
             </div>
           </div>
         ))}
-        {/*
-        // for reference
-        <div className="message own">
-          <div className="texts">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
-              fugiat at quidem? Reprehenderit quibusdam, quasi ad, neque fugit
-              laboriosam assumenda eius odit sit ratione quas consectetur,
-              facilis nulla nemo atque?
-            </p>
-            <span>1 min ago</span>
+        {image.url && (
+          <div className="message own">
+            <div className="texts">
+              <img
+                src={image.url}
+                alt="shared image"
+                style={{
+                  filter: "brightness(70%)"
+                }}
+              />
+            </div>
           </div>
-        </div>
-        <div className="message">
-          <img src="./avatar.png" alt="avatar" />
-          <div className="texts">
-            <img
-              src="https://images.pexels.com/photos/2693212/pexels-photo-2693212.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              alt="shared image"
-            />
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
-              fugiat at quidem? Reprehenderit quibusdam, quasi ad, neque fugit
-              laboriosam assumenda eius odit sit ratione quas consectetur,
-              facilis nulla nemo atque?
-            </p>
-            <span>1 min ago</span>
-          </div>
-        </div> */}
+        )}
         <div ref={endRef}></div>
       </div>
       <div className="bottom">
         <div className="icons">
-          <img src="./img.png" alt="emoji" />
+          <label htmlFor="file">
+            <img src="./img.png" alt="emoji" />
+          </label>
+          <input
+            type="file"
+            name="image"
+            id="file"
+            style={{ display: "none" }}
+            onChange={handleImage}
+          />
           <img src="./camera.png" alt="emoji" />
           <img src="./mic.png" alt="emoji" />
         </div>
