@@ -1,5 +1,11 @@
 import EmojiPicker from "emoji-picker-react"
-import { doc, onSnapshot } from "firebase/firestore"
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc
+} from "firebase/firestore"
 import { useEffect, useRef, useState } from "react"
 import { db } from "../../lib/firebase"
 import { useChatStore } from "../../lib/store/chatStore"
@@ -12,12 +18,13 @@ function Chat() {
   const [text, setText] = useState("")
 
   const { currentUser } = useUserStore()
-  const { chatId } = useChatStore()
+  const { chatId, user } = useChatStore()
 
   const endRef = useRef(null)
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [])
+
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "chats", chatId), async document => {
       setChat(document.data())
@@ -32,13 +39,50 @@ function Chat() {
     setText(prev => prev + e.emoji)
   }
 
+  const handleSend = async () => {
+    if (text === "") return
+
+    try {
+      await updateDoc(doc(db, "chats", chatId), {
+        messages: arrayUnion({
+          senderId: currentUser.id,
+          text,
+          createdAt: new Date()
+        })
+      })
+
+      const userIDs = [currentUser.id, user.id]
+
+      userIDs.forEach(async id => {
+        const userChatsRef = doc(db, "userChats", id)
+        const userChatsSnapshot = await getDoc(userChatsRef)
+        if (userChatsSnapshot.exists()) {
+          const userChatsData = userChatsSnapshot.data()
+          const chatIndex = userChatsData.chats.findIndex(
+            c => c.chatId === chatId
+          )
+          userChatsData.chats[chatIndex].lastMessage = text
+          userChatsData.chats[chatIndex].isSeen = id === currentUser.id
+          userChatsData.chats[chatIndex].updatedAt = Date.now()
+
+          await updateDoc(userChatsRef, {
+            chats: userChatsData.chats
+          })
+        }
+      })
+      setText("")
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div className="chat">
       <div className="top">
         <div className="user">
-          <img src="./avatar.png" alt="avatar" />
+          <img src={user.avatar || "./avatar.png"} alt="avatar" />
           <div className="texts">
-            <span>Jane Doe</span>
+            <span>{user.username}</span>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
           </div>
         </div>
@@ -50,7 +94,7 @@ function Chat() {
       </div>
       <div className="center">
         {chat?.messages?.map(message => (
-          <div className="message" key={message?.createAt}>
+          <div className="message" key={message?.createdAt}>
             <img src="./avatar.png" alt="avatar" />
             <div className="texts">
               {message?.img && <img src={message?.img} alt="shared image" />}
@@ -115,7 +159,9 @@ function Chat() {
             onEmojiClick={handleEmoji}
           />
         </div>
-        <button className="sendButton">Send</button>
+        <button className="sendButton" onClick={handleSend}>
+          Send
+        </button>
       </div>
     </div>
   )

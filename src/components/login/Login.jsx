@@ -28,16 +28,15 @@ function Login() {
 
   const handleLogin = async e => {
     e.preventDefault()
-    setLoading(true)
     const formData = new FormData(e.target)
     const { email, password } = Object.fromEntries(formData)
     if (!(email || password)) {
       toast.warn("All field required")
-
       return
     }
 
     try {
+      setLoading(true)
       await signInWithEmailAndPassword(auth, email, password)
       toast.success("You have successfully logged in!")
     } catch (error) {

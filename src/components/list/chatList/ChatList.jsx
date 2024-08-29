@@ -1,4 +1,4 @@
-import { doc, getDoc, onSnapshot } from "firebase/firestore"
+import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { db } from "../../../lib/firebase"
 import { useChatStore } from "../../../lib/store/chatStore"
@@ -34,6 +34,20 @@ function ChatList() {
   }, [currentUser.id])
 
   const handleSelect = async chat => {
+    const userChats = chats.map(item => {
+      const { user, ...rest } = item
+      return rest
+    })
+    const chatIndex = userChats.findIndex(item => item.chatId == chat.chatId)
+    userChats[chatIndex].isSeen = true
+
+    try {
+      await updateDoc(doc(db, "userChats", currentUser.id), {
+        chats: userChats
+      })
+    } catch (error) {
+      console.error(error)
+    }
     changeChat(chat.chatId, chat.user)
   }
 
@@ -56,6 +70,9 @@ function ChatList() {
           className="item"
           key={chat.chatId}
           onClick={() => handleSelect(chat)}
+          style={{
+            backgroundColor: chat?.isSeen ? "transparent" : "#5183fe"
+          }}
         >
           <img src={chat.user.avatar || "./avatar.png"} alt="avatar" />
           <div className="texts">
