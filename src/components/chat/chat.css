@@ -138,6 +138,10 @@
       padding: 20px;
       border-radius: 10px;
       font-size: 16px;
+      &:disabled {
+        /* background-color: rgba(17, 25, 40, 0.7); */
+        cursor: not-allowed;
+      }
     }
 
     .sendButton {
@@ -147,6 +151,11 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+
+      &:disabled {
+        background-color: #5182feb4;
+        cursor: not-allowed;
+      }
     }
 
     .emoji {

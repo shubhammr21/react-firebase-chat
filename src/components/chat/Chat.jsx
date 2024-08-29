@@ -20,7 +20,10 @@ function Chat() {
   const [counter, setCounter] = useState(0)
 
   const { currentUser } = useUserStore()
-  const { chatId, user } = useChatStore()
+  const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
+    useChatStore()
+
+  const isBlocked = isCurrentUserBlocked || isReceiverBlocked
   const [image, setImage] = useState({
     file: null,
     url: ""
@@ -46,6 +49,7 @@ function Chat() {
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "chats", chatId), async document => {
       setChat(document.data())
+      setCounter(prev => prev + 1)
     })
 
     return () => {
@@ -105,9 +109,9 @@ function Chat() {
     <div className="chat">
       <div className="top">
         <div className="user">
-          <img src={user.avatar || "./avatar.png"} alt="avatar" />
+          <img src={user?.avatar || "./avatar.png"} alt="avatar" />
           <div className="texts">
-            <span>{user.username}</span>
+            <span>{user?.username}</span>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
           </div>
         </div>
@@ -166,9 +170,12 @@ function Chat() {
         <input
           type="text"
           name="chat"
-          placeholder="Type a message..."
+          placeholder={
+            isBlocked ? "You cannot send the message!" : "Type a message..."
+          }
           onChange={e => setText(e.target.value)}
           value={text}
+          disabled={isBlocked}
         />
         <div className="emoji">
           <img
@@ -182,7 +189,11 @@ function Chat() {
             onEmojiClick={handleEmoji}
           />
         </div>
-        <button className="sendButton" onClick={handleSend}>
+        <button
+          className="sendButton"
+          onClick={handleSend}
+          disabled={isBlocked}
+        >
           Send
         </button>
       </div>
