@@ -16,6 +16,9 @@
       "host": "0.0.0.0",
       "enabled": true
     },
+    "storage": {
+      "host": "0.0.0.0"
+    },
     "singleProjectMode": true
   },
   "storage": {
